@@ -23,23 +23,34 @@
 		/> -->
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<context:component-scan base-package="src/main" />
+	<context:component-scan base-package="src" />
 	<context:annotation-config />
 
 	<security:http auto-config="true" use-expressions="true">
-		<!-- <security:intercept-url pattern="/**"
+		<!-- <security:intercept-url pattern="/**" access="hasRole('ADMIN')" /> -->
+		<!-- <security:intercept-url pattern="/rs/postService/**"
 			access="hasRole('ADMIN')" /> -->
 		<security:intercept-url pattern="/rs/postService/**"
-			access="hasRole('ADMIN')" />
-			
+			access="hasAnyRole('USER','ADMIN')" />
 			
 	</security:http>
-	
+
+	<bean id="userInfo" class="web.MODEL.UserInfo" />
+
+	<bean id="userDao" class="web.DAO.UserDaoImpl">
+		<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
+
+
+	<bean id="userDetailService" class="web.DAO.AuthenticationService">
+		<property name="userDao" ref="userDao" />
+	</bean>
+
 	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="ADMIN" password="admin" authorities="ADMIN"/>
-			</security:user-service>
+		<security:authentication-provider
+			user-service-ref="userDetailService">
+			<!-- <security:user-service> <security:user name="ADMIN" password="admin" 
+				authorities="ADMIN"/> </security:user-service> -->
 		</security:authentication-provider>
 	</security:authentication-manager>
 
