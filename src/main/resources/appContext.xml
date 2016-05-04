@@ -28,11 +28,11 @@
 
 	<security:http auto-config="true" use-expressions="true">
 		<!-- <security:intercept-url pattern="/**" access="hasRole('ADMIN')" /> -->
-		<!-- <security:intercept-url pattern="/rs/postService/**"
-			access="hasRole('ADMIN')" /> -->
+		<!-- <security:intercept-url pattern="/rs/postService/**" access="hasRole('ADMIN')" 
+			/> -->
 		<security:intercept-url pattern="/rs/postService/**"
 			access="hasAnyRole('USER','ADMIN')" />
-			
+
 	</security:http>
 
 	<bean id="userInfo" class="web.MODEL.UserInfo" />
@@ -109,6 +109,15 @@
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	</bean>
+
+	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
+		id="messages">
+		<property name="basenames">
+			<list>
+				<value>message</value>
+			</list>
+		</property>
 	</bean>
 
 
